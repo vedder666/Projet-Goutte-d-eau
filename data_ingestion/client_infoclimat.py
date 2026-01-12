@@ -1,6 +1,5 @@
 """
 Client Infoclimat OpenData API v2 - Format hourly["000BG"]
-Retourne le JSON COMPLET pour transformation
 """
 import requests
 import logging
@@ -8,8 +7,9 @@ from typing import Dict, Any, List
 from datetime import date, timedelta
 from urllib.parse import urlencode
 from .config import config
+from logger.logger_manager import LoggerManager
 
-logger = logging.getLogger(__name__)
+logger = LoggerManager().get_logger(__name__)
 
 class InfoclimatClient:
     def __init__(self):
@@ -72,7 +72,7 @@ class InfoclimatClient:
             if data.get("status") == "OK":
                 hourly_count = len(data.get(config.HOURLY, {}).get(config.STATION_ID, []))
                 logger.info(f"{hourly_count} hourly records pour {id_station}")
-                return data.get(config.HOURLY, {}).get(config.STATION_ID, [])  # JSON COMPLET
+                return data.get(config.HOURLY, {}).get(config.STATION_ID, []) 
             
             logger.warning(f"Status non-OK: {data.get('status')}")
             return {}
@@ -84,5 +84,3 @@ class InfoclimatClient:
             logger.error(f"JSON {id_station}: {e}")
             return {}
 
-if __name__ == "__main__":
-    test_single_request()

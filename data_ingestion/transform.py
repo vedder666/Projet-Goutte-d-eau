@@ -4,8 +4,9 @@ Extraction des observations
 import logging
 from typing import List, Dict, Any, Optional
 from .config import config
+from logger.logger_manager import LoggerManager
 
-logger = logging.getLogger(__name__)
+logger = LoggerManager().get_logger(__name__)
 
 def extract_hourly_observations(raw_api_data: Dict[str, Any]) -> List[Dict[str, Any]]:
     hourly_data = raw_api_data.get(config.HOURLY, {})

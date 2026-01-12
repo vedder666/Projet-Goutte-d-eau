@@ -3,10 +3,12 @@ Application principale
 """
 import streamlit as st
 import pandas as pd
+import requests
 import sqlite3
 import sys
 import os
-from datetime import date
+from model.model import Model
+from datetime import date, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -69,75 +71,69 @@ def float_or_none(value):
         return None
 
 st.set_page_config(
-    page_title="Projet Goutte d'eau",
-    layout="wide"
+    page_title="Projet Goutte d'eau"
+    
 )
 
+st.title("Projet Goutte d'eau")
+st.image("./resources/logo.jpg", caption="")
 
-col = st.columns(3)[1]
+tab1, tab2 = st.tabs(["Récupération des données et entrainement du modèle", "Prédictions des précipitations"])
 
-st.markdown("""
-<style>
-div.stButton > button {
-    background-color: #3fb3e4; 
-    color: white;
-    border-radius: 10px;
-    border: none;
-    padding: 0.5rem 2rem;
-    font-weight: bold;
-}
-div.stButton > button:hover {
-    background-color: #45a049;
-}
-</style>
-""", unsafe_allow_html=True)
+with tab1:
+    start_date = st.date_input(
+        "Date de début",
+        value=date.today() - timedelta(days=3),
+        min_value=date(2023, 1, 1),
+        max_value=date.today()
+    )
 
-with col:
-    st.title("Projet Goutte d'eau")
+    end_date = st.date_input(
+        "Date de fin",
+        value=date.today(),
+        min_value=start_date,
+        max_value=date.today()
+    )
 
-# Sidebar pour configuration
-st.sidebar.header("Configuration")
-start_date = st.sidebar.date_input(
-    "Date de début",
-    value=date(2026, 1, 1),
-    min_value=date(2023, 1, 1),
-    max_value=date.today()
-)
+    if end_date < start_date:
+        st.error("La date de fin doit etre supérieure à la date de début")
+        st.stop()
 
-end_date = st.sidebar.date_input(
-    "Date de fin",
-    value=date.today(),
-    min_value=start_date,
-    max_value=date.today()
-)
+    # Bouton principal
+    if st.button("LANCER LA RECUPERATION DES DONNEES", type="primary", use_container_width=True):
+        with st.spinner("Récupération des données en cours..."):
+            try:
+                # 1. Initialisation
+                client = InfoclimatClient()
+                db = WeatherDB()
+                
+                # 2. Collecte des données
+                st.info(f"Collecte des données de la station {config.STATION_ID}")
+                raw_data = client.fetch_station_data(config.STATION_ID, start_date, end_date)
+                
+                # 3. Transformation
+                observations = build_observations(raw_data)
+                
+                # 4. Enregistrement dans la base
+                count = db.insert_observations(observations)
+                st.success(f"{count} observations enregistrées en base")
 
-if end_date < start_date:
-    st.sidebar.error("La date de fin doit etre supérieure à la date de début")
-    st.stop()
+                # 5. Preparation des données / Entrainement du modèle et évaluation
+                model = Model()
+                model.train()
 
-with col:
-    st.image("./resources/logo.jpg", caption="")
+            except Exception as e:
+                st.error(f"Erreur: {str(e)}")
+                st.exception(e)
+    # Footer
+    st.caption("Données stockées: "+ config.DB_PATH + " | Station: " + config.STATION_ID + " " + config.STATION_NAME)
 
-# Bouton principal
-if st.button("LANCER LA RECUPERATION DES DONNEES", type="primary", use_container_width=True):
-    with st.spinner("Récupération des données en cours..."):
-        try:
-            # 1. Initialisation
-            client = InfoclimatClient()
-            db = WeatherDB()
-            
-            # 2. Collecte des données
-            st.info(f"Collecte des données de la station {config.STATION_ID}")
-            raw_data = client.fetch_station_data(config.STATION_ID, start_date, end_date)
-            
-            # 3. Transformation
-            observations = build_observations(raw_data)
-            
-            # 4. Enregistrement dans la base
-            count = db.insert_observations(observations)
-            st.success(f"{count} observations enregistrées en base")
-        except Exception as e:
-            st.error(f"Erreur: {str(e)}")
-            st.exception(e)
-# Footer
-st.caption("Données stockées: `data/weather.db` | Station: " + config.STATION_ID + " " + config.STATION_NAME)
+with tab2:
+    date_input = st.date_input("Date de prédiction")
+    if st.button("LANCER LA PREDICTIONS DES PRECIPITATIONS", type="primary", use_container_width=True):
+        response = requests.get(f"http://localhost:8000/predict_rain?date={date_input}")
+        pred = response.json()
+        col1, col2, col3 = st.columns(3)
+        col1.metric("🌡️ Température", f"{pred['temperature']}°C")
+        col2.metric("💧 Humidité", f"{pred['humidite']}%")
+        col3.metric("🌧️ Pluie", f"{pred['rain_probability']:.1%}")

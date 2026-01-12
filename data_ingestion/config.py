@@ -63,5 +63,22 @@ class Config:
     UV_INDEX= "uv_index"
 
     HOURLY = "hourly"
+    HOUR = "hour"
+    MONTH = "month"
+    RAIN = "rain"
 
+    # MODEL
+    STRATEGY = "median"
+    CLASS_WEIGHT = "balanced"
+    TEST_SIZE = 0.2
+    N_ESTIMATOR = 200
+    MAX_DEPTH = 10
+    RANDOM_STATE = 42
+    RAIN_MODEL_PATH = "data/rain_model.pkl"
+    IMPUTER_PATH = "data/imputer.pkl"
+    PRECISION ='precision'
+    RECALL = 'recall'
+    F1_SCORE = 'f1-score'
+    CMAP = 'RdYlBu_r'
+    FMT = '.3f'
 config = Config()

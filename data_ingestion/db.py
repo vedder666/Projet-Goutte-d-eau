@@ -6,10 +6,11 @@ import sqlite3
 import logging
 from typing import List, Dict, Any
 from pathlib import Path
+from logger.logger_manager import LoggerManager
 
 from .config import config
 
-logger = logging.getLogger(__name__)
+logger = LoggerManager().get_logger(__name__)
 
 class WeatherDB:
     def __init__(self, db_path: str = config.DB_PATH):
