@@ -64,11 +64,39 @@ Interface utilisateur principale avec 2 onglets pour le pipeline ETL + ML + pré
 
 FONCTIONNEMENT
 
-1/ Double cliquer sur le fichier install_package, cela aura pour effet d'installer tous les packages pour l'application (fastapi uvicorn[standard] pydantic joblib numpy pandas requests scikit-learn matplotlib seaborn streamlit)
+1/ Recuperation des données, entrainement du modèle et évaluation du modèle
 
-2/ Doubler cliquer sur launch_app, cela lancer l'application
+1.1/ Double cliquer sur le fichier install_package, cela aura pour effet d'installer tous les packages pour l'application (fastapi uvicorn[standard] pydantic joblib numpy pandas requests scikit-learn matplotlib seaborn streamlit)
+
+2.1/ Doubler cliquer sur launch_app, cela lance l'application
 
 ![Logo](resources/capture1.jpg)
+
+Le premier onglet permet de récupérer les données d'une station (ici 000BG / ENS Lyon 7eme). il est alors nécessaire de choisir les dates de debut et de fin de la periode à sauvegarder en base de données. Par défaut la date de fin est initialisé à la date du jour et celle de début 5 jours avant.
+En cliquant sur le bouton "LANCER LA RECUPERATION DES DONNEES", l'application appelle l'API InfoClimat sauvegarde les données dans une base de données SQLLite, entraine le modèle et l'évalue.
+Le nombre d'observation météo, la précision, le recall et le F1-Score sont affichés : 
+
+![Logo](resources/capture2.jpg)
+
+ainsi qu'une heatmap : 
+![Logo](resources/capture3.jpg)
+
+2/ Prédiction de la probabilié de pluie
+
+2.1/ Double cliquer sur launch_API qui aura pour effet d'initialiser l'API qui sera alors accessible via l'URL : http://localhost:8000/docs
+
+![Logo](resources/capture4.jpg)
+
+2.2/ Il est possible de tester l'API en cliquant sur l'onglet "Prédiction des précipitations"
+
+![Logo](resources/capture5.jpg)
+
+2.3/ Choisir une date de prédiction et cliquer sur le bouton "LANCER LA PREDICTION DES PRECIPITATIONS"
+La prédiction de température, de l'humidité et de la pluie s'affiche alors : 
+
+![Logo](resources/capture6.jpg)
+
+
 
 
 
