@@ -64,3 +64,11 @@ Interface utilisateur principale avec 2 onglets pour le pipeline ETL + ML + pré
 
 FONCTIONNEMENT
 
+1/ Double cliquer sur le fichier install_package, cela aura pour effet d'installer tous les packages pour l'application (fastapi uvicorn[standard] pydantic joblib numpy pandas requests scikit-learn matplotlib seaborn streamlit)
+
+2/ Doubler cliquer sur launch_app, cela lancer l'application
+
+![Logo](resources/capture1.jpg)
+
+
+
