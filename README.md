@@ -18,7 +18,7 @@ Les packages a installer sont les suivants :
  - streamlit
  
 
-**ARCHITECTURE**
+**ARCHITECTURE LOGICIELLE**
 
   
 
@@ -163,3 +163,4 @@ La prédiction de température, de l'humidité et de la pluie s'affiche alors :
   
 
 ![Logo](resources/capture6.jpg)
+
