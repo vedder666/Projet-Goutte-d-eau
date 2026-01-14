@@ -29,3 +29,11 @@
 2026-01-12 15:45:49 | data_ingestion.client_infoclimat | INFO | 1 batches récupérés
 2026-01-12 15:47:03 | data_ingestion.client_infoclimat | INFO | 520 hourly records pour 000BG
 2026-01-12 15:47:03 | data_ingestion.client_infoclimat | INFO | 1 batches récupérés
+2026-01-13 10:24:06 | data_ingestion.client_infoclimat | INFO | 488 hourly records pour 000BG
+2026-01-13 10:24:06 | data_ingestion.client_infoclimat | INFO | 1 batches récupérés
+2026-01-13 11:42:08 | data_ingestion.client_infoclimat | INFO | 495 hourly records pour 000BG
+2026-01-13 11:42:08 | data_ingestion.client_infoclimat | INFO | 1 batches récupérés
+2026-01-13 11:50:58 | data_ingestion.client_infoclimat | INFO | 496 hourly records pour 000BG
+2026-01-13 11:50:58 | data_ingestion.client_infoclimat | INFO | 1 batches récupérés
+2026-01-13 11:51:31 | data_ingestion.client_infoclimat | INFO | 784 hourly records pour 000BG
+2026-01-13 11:51:31 | data_ingestion.client_infoclimat | INFO | 1 batches récupérés

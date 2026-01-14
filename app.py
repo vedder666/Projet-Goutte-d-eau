@@ -71,37 +71,51 @@ def float_or_none(value):
         return None
 
 st.set_page_config(
-    page_title="Projet Goutte d'eau"
-    
+    page_title=config.PROJECT_TITLE
 )
 
-st.title("Projet Goutte d'eau")
-st.image("./resources/logo.jpg", caption="")
+st.markdown("""
+<style>
+button[data-baseweb="tab"] { color: #0066cc !important; }
+button[data-baseweb="tab"]:hover { background-color: #e6f3ff !important; color: #004499 !important; }
+.stButton > button { background-color: #0066cc !important; color: white !important; }
+.stButton > button:hover { background-color: #004499 !important; }
+h1, h2, h3 { color: #0066cc !important; }
+</style>
+""", unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs(["Récupération des données et entrainement du modèle", "Prédictions des précipitations"])
+col1, col2, col3 = st.columns([1, 3, 1]) 
+with col2:
+    col_left, col_right = st.columns(2)
+    with col_left:
+        st.title(config.PROJECT_TITLE)
+    with col_right:
+        st.image(config.LOGO_PATH, use_container_width=True)
+
+tab1, tab2 = st.tabs([config.TAB1_TITLE, config.TAB2_TITLE])
 
 with tab1:
     start_date = st.date_input(
-        "Date de début",
-        value=date.today() - timedelta(days=3),
+        config.DATE_DEBUT,
+        value=date.today() - timedelta(days=5),
         min_value=date(2023, 1, 1),
         max_value=date.today()
     )
 
     end_date = st.date_input(
-        "Date de fin",
+        config.DATE_FIN,
         value=date.today(),
         min_value=start_date,
         max_value=date.today()
     )
 
     if end_date < start_date:
-        st.error("La date de fin doit etre supérieure à la date de début")
+        st.error(config.ALERT_DATE)
         st.stop()
 
     # Bouton principal
-    if st.button("LANCER LA RECUPERATION DES DONNEES", type="primary", use_container_width=True):
-        with st.spinner("Récupération des données en cours..."):
+    if st.button(config.LAUNCH_RECUP, type="primary", use_container_width=True):
+        with st.spinner(config.RECUP_DATA_SPINNER):
             try:
                 # 1. Initialisation
                 client = InfoclimatClient()
@@ -129,11 +143,14 @@ with tab1:
     st.caption("Données stockées: "+ config.DB_PATH + " | Station: " + config.STATION_ID + " " + config.STATION_NAME)
 
 with tab2:
-    date_input = st.date_input("Date de prédiction")
-    if st.button("LANCER LA PREDICTIONS DES PRECIPITATIONS", type="primary", use_container_width=True):
-        response = requests.get(f"http://localhost:8000/predict_rain?date={date_input}")
+    date_input = st.date_input(config.PREDICT_DATE)
+    if date_input < date.today():
+        st.error(config.ALERT1_DATE)
+        st.stop()
+    if st.button(config.LAUNCH_PREDICT, type="primary", use_container_width=True):
+        response = requests.get(f"{config.API_URL}date={date_input}")
         pred = response.json()
         col1, col2, col3 = st.columns(3)
-        col1.metric("🌡️ Température", f"{pred['temperature']}°C")
-        col2.metric("💧 Humidité", f"{pred['humidite']}%")
-        col3.metric("🌧️ Pluie", f"{pred['rain_probability']:.1%}")
+        col1.metric("🌡️ Température", f"{pred[config.TEMPERATURE]}°C")
+        col2.metric("💧 Humidité", f"{pred[config.HUMIDITE]}%")
+        col3.metric("🌧️ Pluie", f"{pred[config.RAIN_PROBABILITY]:.1%}")

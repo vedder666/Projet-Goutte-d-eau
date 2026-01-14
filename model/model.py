@@ -102,9 +102,9 @@ def plot_classification_report_visual(y_test, y_pred):
                 fmt=config.FMT,
                 cbar_kws={'label': 'Score'})
     
-    plt.title('Classification Report - Heatmap', fontsize=14, fontweight='bold')
-    plt.xlabel('Classes')
-    plt.ylabel('Métriques')
+    plt.title(config.HEATMAP, fontsize=14, fontweight='bold')
+    plt.xlabel(config.CLASSES)
+    plt.ylabel(config.METRIC)
     plt.tight_layout()
     plt.show()
     

@@ -10,6 +10,7 @@ from typing import List
 class Config:
     # Base SQLite
     DB_PATH: str = "data/weather.db"
+    LOGO_PATH = "./resources/logo.jpg"
     
     # Station Infoclimat
     STATION_ID: str = "000BG"
@@ -27,6 +28,8 @@ class Config:
     # API Infoclimat (open data)
     INFOCLIMAT_BASE_URL: str = "https://www.infoclimat.fr/opendata"
     INFOCLIMAT_TOKEN: str = "PoL7dV7eSlyypj8d0F19gB51RqCVhM6SCuXJao0bDT2tZl3WMpaJA" 
+
+    API_URL = "http://localhost:8000/predict_rain?"
     
     # Batch size pour insertions
     BATCH_SIZE: int = 30
@@ -66,6 +69,9 @@ class Config:
     HOUR = "hour"
     MONTH = "month"
     RAIN = "rain"
+    HEURE_UTC = 'heure_utc'
+    MOIS_UTC = 'mois_utc'
+    RAIN_PROBABILITY = 'rain_probability'
 
     # MODEL
     STRATEGY = "median"
@@ -81,4 +87,21 @@ class Config:
     F1_SCORE = 'f1-score'
     CMAP = 'RdYlBu_r'
     FMT = '.3f'
+
+    # Locale
+    PROJECT_TITLE = "Projet Goutte d'eau"
+    TAB1_TITLE = "Récupération des données et entrainement du modèle"
+    TAB2_TITLE = "Prédictions des précipitations"
+    DATE_DEBUT = "Date de début"
+    DATE_FIN = "Date de fin"
+    LAUNCH_RECUP = "LANCER LA RECUPERATION DES DONNEES"
+    LAUNCH_PREDICT = "LANCER LA PREDICTIONS DES PRECIPITATIONS"
+    ALERT_DATE = "La date de fin doit etre supérieure à la date de début"
+    RECUP_DATA_SPINNER = "Récupération des données en cours..."
+    PREDICT_DATE = "Date de prédiction"
+    ALERT1_DATE = "La date de doit etre supérieure à la date du jour"
+    HEATMAP = 'Classification Report - Heatmap'
+    CLASSES = 'Classes'
+    METRIC = 'Métriques'
+
 config = Config()
